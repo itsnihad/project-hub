@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "order": {
+      "title": "Order",
+      "description": "Represents a customer order with financial and status details.",
+      "type": "object",
+      "properties": {
+        "clientName": { "type": "string", "description": "Name of the client who placed the order" },
+        "amount": { "type": "number", "description": "Base order amount" },
+        "revenue": { "type": "number", "description": "The 20% cut deducted from amount" },
+        "value": { "type": "number", "description": "Amount after the 20% cut" },
+        "finalValue": { "type": "number", "description": "Value after collaboration deduction" },
+        "collaborationPercent": { "type": "number", "description": "Optional percentage for collaboration" },
+        "siteUrl": { "type": "string", "description": "URL of the working site" },
+        "username": { "type": "string", "description": "Credentials: username" },
+        "password": { "type": "string", "description": "Credentials: password" },
+        "transferredUrl": { "type": "string", "description": "URL where the order was transferred" },
+        "status": { "type": "string", "enum": ["WIP", "NRA", "Delivered"], "description": "Current processing status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of order creation" },
+        "deliveredDate": { "type": "string", "format": "date-time", "description": "Date when order was marked as Delivered" }
+      },
+      "required": ["clientName", "amount", "status", "createdAt"]
+    },
+    "appUser": {
+      "title": "App User",
+      "description": "User profile with login credentials and PIN.",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string", "description": "Unique username for login" },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "User role" },
+        "pin": { "type": "string", "description": "4-digit quick access PIN" },
+        "password": { "type": "string", "description": "Stored password (in a real app this should be hashed, but for this specific manual system request we follow requirements)" }
+      },
+      "required": ["username", "role", "password"]
+    },
+    "task": {
+      "title": "Task",
+      "description": "A management task for orders or internal work.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Task title" },
+        "description": { "type": "string", "description": "Task description" },
+        "orderId": { "type": "string", "description": "Optional linked Order ID" },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High"], "description": "Importance level" },
+        "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed"], "description": "Completion state" },
+        "dueDate": { "type": "string", "format": "date-time", "description": "Deadline" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "userId": { "type": "string", "description": "Owner of the task" }
+      },
+      "required": ["title", "priority", "status", "dueDate", "createdAt", "userId"]
+    }
+  },
+  "firestore": {
+    "orders": {
+      "schema": "order",
+      "description": "Collection of all customer orders"
+    },
+    "users": {
+      "schema": "appUser",
+      "description": "Collection of application users and their settings"
+    },
+    "tasks": {
+      "schema": "task",
+      "description": "Collection of user tasks"
+    }
+  }
+}
